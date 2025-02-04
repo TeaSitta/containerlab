@@ -4,9 +4,9 @@
 
 ## cd into one of the following topology directories:
 
-simple-evpn -- 2 node collapsed core with
+simple-evpn -- 2 node collapsed core for evpn-mpls, ESI and RT5 testing.
 
-stellar-evpn -- larger evpn-mpls core and pops
+evpn-mpls -- large evpn-mpls core with meshed leafs and PoP regional head end routers.
 
 ## run containerlab, or clab 
 common commands:
