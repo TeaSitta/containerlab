@@ -1,0 +1,221 @@
+## Last changed: 2025-02-04 15:05:23 UTC
+version 23.4R2-S2.1;
+system {
+    host-name evpn1;
+    root-authentication {
+        encrypted-password "$6$3VdpIJfO$SXYiwd1zD0.dcIbUFwcz/bl9rMwceSmCjFvD1GT6BgocCF8h2gSoQR47X7M2RMqeVOFRIXXBfnuRGvQyJIoIv0";
+    }
+    login {
+        user admin {
+            uid 2000;
+            class super-user;
+            authentication {
+                encrypted-password "$6$v6G27Jkz$iuLb1vqisOik9zWrCugSgRhFhsptYzoV5xmFptYsshhYExmqF17xUCSxmFxED9T.FqpNPR1xx4VTRCnuSo5ds1";
+            }
+        }
+    }
+    services {
+        netconf {
+            ssh;
+        }
+        ssh {
+            root-login allow;
+        }
+    }
+    arp {
+        aging-timer 5;
+    }
+    management-instance;
+}
+chassis {
+    aggregated-devices {
+        ethernet {
+            device-count 21;
+        }
+    }
+}
+interfaces {
+    ge-0/0/0 {
+        gigether-options {
+            802.3ad ae0;
+        }
+    }
+    ge-0/0/1 {
+        gigether-options {
+            802.3ad ae0;
+        }
+    }
+    ge-0/0/3 {
+        description "to srx1";
+        gigether-options {
+            802.3ad ae10;
+        }
+    }
+    ge-0/0/4 {
+        description "to ixia2";
+    }
+    ae0 {
+        description "to evpn2";
+        mtu 9192;
+        aggregated-ether-options {
+            lacp {
+                active;
+            }
+        }
+        unit 0 {
+            family inet {
+                unnumbered-address lo0.0;
+            }
+            family mpls;
+        }
+    }
+    ae10 {
+        description "to srx1";
+        vlan-tagging;
+        encapsulation flexible-ethernet-services;
+        esi {
+            00:11:22:33:44:55:66:77:88:99;
+            all-active;
+            df-election-type {
+                preference {
+                    value 420;
+                }
+            }
+        }
+        aggregated-ether-options {
+            lacp {
+                active;
+                system-id 10:10:10:10:10:10;
+            }
+        }
+        unit 10 {
+            encapsulation vlan-bridge;
+            vlan-id 10;
+        }
+    }
+    fxp0 {
+        unit 0 {
+            family inet {
+                address 10.0.0.15/24;
+            }
+            family inet6 {
+                address 2001:db8::2/64;
+            }
+        }
+    }
+    irb {
+        unit 10 {
+            family inet {
+                address 192.168.10.1/24;
+            }
+        }
+        unit 20 {
+            family inet {
+                address 192.168.20.1/24;
+            }
+        }
+    }
+    lo0 {
+        unit 0 {
+            family inet {
+                address 10.1.1.1/32;
+            }
+        }
+    }
+}
+policy-options {
+    policy-statement ECMP {
+        term 1 {
+            then {
+                load-balance per-packet;
+            }
+        }
+    }
+}
+routing-instances {
+    ixia1 {
+        instance-type evpn;
+        protocols {
+            evpn;
+        }
+        vlan-id 10;
+        routing-interface irb.10;
+        interface ae10.10;
+        route-distinguisher 10.1.1.1:10;
+        vrf-target target:10:10;
+    }
+    mgmt_junos {
+        routing-options {
+            rib mgmt_junos.inet6.0 {
+                static {
+                    route ::/0 next-hop 2001:db8::1;
+                }
+            }
+            static {
+                route 0.0.0.0/0 next-hop 10.0.0.2;
+            }
+        }
+    }
+}
+routing-options {
+    router-id 10.1.1.1;
+    autonomous-system 65420;
+    graceful-restart;
+    forwarding-table {
+        export ECMP;
+        evpn-egress-link-protection;
+        ecmp-fast-reroute;
+    }
+}
+protocols {
+    bgp {
+        group EVPN {
+            type internal;
+            local-address 10.1.1.1;
+            family evpn {
+                signaling;
+            }
+            cluster 10.1.1.1;
+            local-as 65420;
+            multipath;
+            neighbor 10.1.1.2 {
+                description evpn2;
+                peer-as 65420;
+            }
+            vpn-apply-export;
+        }
+        log-updown;
+        graceful-restart;
+    }
+    evpn {
+        no-core-isolation;
+    }
+    ldp {
+        interface ae0.0;
+    }
+    mpls {
+        interface ae0.0;
+    }
+    ospf {
+        traffic-engineering;
+        area 0.0.0.0 {
+            interface lo0.0 {
+                passive;
+            }
+            interface all {
+                interface-type p2p;
+            }
+            interface ae0.0 {
+                interface-type p2p;
+            }
+        }
+        reference-bandwidth 400g;
+    }
+    l2-learning {
+        global-mac-table-aging-time 600;
+        global-mac-ip-table-aging-time 300;
+    }
+    lldp {
+        interface all;
+    }
+}

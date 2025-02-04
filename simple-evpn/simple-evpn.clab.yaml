@@ -1,0 +1,53 @@
+# Reminder: vJunosEvo requires the following for evpn-vxlan
+#   set forwarding-options tunnel-termination
+#      kind: juniper_vjunosevolved
+#      image: vrnetlab/juniper_vjunosevolved:23.4R2-S2.1
+#      kind: juniper_vjunosrouter
+#      image: vrnetlab/juniper_vjunos-router:23.2R1.15
+#      image: vrnetlab/juniper_vjunos-router:23.4R2-S2.1
+
+name: evpn
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:23.4R2-S2.1
+    juniper_vsrx:
+      image: vrnetlab/juniper_vsrx:24.2R1-S2.5
+    linux:
+      image: custom-multitool
+    keysight_ixia-c-one:
+      image: ghcr.io/open-traffic-generator/ixia-c-one
+
+  nodes:
+    evpn1:
+      kind: juniper_vjunosrouter
+      startup-config: configs/evpn1.txt
+      restart-policy: "no"
+    evpn2:
+      kind: juniper_vjunosrouter
+      startup-config: configs/evpn2.txt
+      restart-policy: "no"
+
+    srx1:
+      kind: juniper_vsrx
+
+#    ixia1:
+#      kind: keysight_ixia-c-one
+
+#    ixia2:
+#      kind: keysight_ixia-c-one
+
+
+  links:
+    - endpoints: ["evpn1:ge-0/0/0", "evpn2:ge-0/0/0"]
+      mtu: 9200
+    - endpoints: ["evpn1:ge-0/0/1", "evpn2:ge-0/0/1"]
+      mtu: 9200
+    - endpoints: ["evpn1:ge-0/0/3", "srx1:ge-0/0/0"]
+      mtu: 9200
+    - endpoints: ["evpn2:ge-0/0/3", "srx1:ge-0/0/1"]
+    # - endpoints: ["ixia1:eth1", "evpn1:ge-0/0/3"]
+    # - endpoints: ["ixia1:eth2", "evpn2:ge-0/0/3"]
+    # - endpoints: ["ixia2:eth1", "evpn1:ge-0/0/4"]
+    # - endpoints: ["ixia2:eth2", "evpn2:ge-0/0/4"]
+    
