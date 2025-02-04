@@ -30,3 +30,5 @@ clab deploy
 
 containerlab/custom-multitool - `docker make` to build the Dockerfile. Currently set up to add apks to alpine linux.
 
+lab-dir/cfg-backup.sh - Download running configs and overwrite lab-dir/config/node.txt
+- Currently hard coded node names and junos password
