@@ -1,6 +1,8 @@
 # Network lab testing with containerlab
 
-## install-containerlab.sh will do the initial containerlab install on debian.
+## install-containerlab.sh will do the initial containerlab install on Debian.
+- Ensure nested virtualization is on and the Debian guest is passed the physical CPU properties.
+
 
 ## cd into one of the following topology directories:
 
