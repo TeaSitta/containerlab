@@ -1,4 +1,4 @@
-## Last changed: 2025-02-04 15:06:00 UTC
+## Last changed: 2025-02-04 23:20:42 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -106,8 +106,11 @@ interfaces {
     irb {
         unit 10 {
             family inet {
-                address 192.168.10.2/24;
+                address 192.168.10.3/24 {
+                    virtual-gateway-address 192.168.10.1;
+                }
             }
+            virtual-gateway-v4-mac aa:bb:cc:00:00:10;
         }
         unit 20 {
             family inet {
@@ -133,17 +136,6 @@ policy-options {
     }
 }
 routing-instances {
-    ixia1 {
-        instance-type evpn;
-        protocols {
-            evpn;
-        }
-        vlan-id 10;
-        routing-interface irb.10;
-        interface ae10.10;
-        route-distinguisher 10.1.1.2:10;
-        vrf-target target:10:10;
-    }
     mgmt_junos {
         routing-options {
             rib mgmt_junos.inet6.0 {
@@ -156,6 +148,19 @@ routing-instances {
             }
         }
     }
+    srx1 {
+        instance-type evpn;
+        protocols {
+            evpn {
+                default-gateway no-gateway-community;
+            }
+        }
+        vlan-id 10;
+        routing-interface irb.10;
+        interface ae10.10;
+        route-distinguisher 10.1.1.2:10;
+        vrf-target target:10:10;
+    }
 }
 routing-options {
     router-id 10.1.1.2;
@@ -165,10 +170,21 @@ routing-options {
         export ECMP;
         evpn-egress-link-protection;
         ecmp-fast-reroute;
+        chained-composite-next-hop {
+            ingress {
+                evpn;
+            }
+        }
     }
 }
 protocols {
     bgp {
+        family inet {
+            unicast;
+        }
+        family l2vpn {
+            signaling;
+        }
         group EVPN {
             type internal;
             local-address 10.1.1.2;
@@ -192,6 +208,10 @@ protocols {
     }
     ldp {
         interface ae0.0;
+        interface fxp0.0 {
+            disable;
+        }
+        interface lo0.0;
     }
     mpls {
         interface ae0.0;

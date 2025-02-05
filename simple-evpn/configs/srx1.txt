@@ -1,4 +1,4 @@
-## Last changed: 2025-02-04 01:56:26 UTC
+## Last changed: 2025-02-04 23:25:41 UTC
 version 24.2R1-S2.5;
 system {
     host-name srx1;
@@ -101,7 +101,7 @@ routing-instances {
     }
 }
 protocols {
-    ospf {
+    inactive: ospf {
         area 0.0.0.0 {
             interface ae0.10;
         }
