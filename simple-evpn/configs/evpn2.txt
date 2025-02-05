@@ -1,4 +1,4 @@
-## Last changed: 2025-02-05 19:31:09 UTC
+## Last changed: 2025-02-05 21:21:55 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -52,7 +52,10 @@ interfaces {
         }
     }
     ge-0/0/4 {
-        description "to ixia2";
+        description "to srx2";
+        gigether-options {
+            802.3ad ae20;
+        }
     }
     ae0 {
         description "to evpn2";
@@ -93,6 +96,30 @@ interfaces {
             vlan-id 10;
         }
     }
+    ae20 {
+        description "to srx1";
+        vlan-tagging;
+        encapsulation flexible-ethernet-services;
+        esi {
+            00:99:88:77:66:55:44:33:22:11;
+            all-active;
+            df-election-type {
+                preference {
+                    value 420;
+                }
+            }
+        }
+        aggregated-ether-options {
+            lacp {
+                active;
+                system-id 20:20:20:20:20:20;
+            }
+        }
+        unit 20 {
+            encapsulation vlan-bridge;
+            vlan-id 20;
+        }
+    }
     fxp0 {
         unit 0 {
             family inet {
@@ -112,8 +139,9 @@ interfaces {
         }
         unit 20 {
             family inet {
-                address 192.168.20.2/24;
+                address 192.168.20.1/24;
             }
+            mac cc:bb:aa:00:00:20;
         }
     }
     lo0 {
@@ -156,6 +184,17 @@ routing-instances {
         interface ae10.10;
         route-distinguisher 10.1.1.2:10;
         vrf-target target:10:10;
+    }
+    srx2 {
+        instance-type evpn;
+        protocols {
+            evpn;
+        }
+        vlan-id 20;
+        routing-interface irb.20;
+        interface ae20.20;
+        route-distinguisher 10.1.1.2:20;
+        vrf-target target:20:20;
     }
 }
 routing-options {
