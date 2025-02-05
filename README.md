@@ -21,16 +21,20 @@ clab deploy
 
 
 # Shell scripts
+Run these from the topology dir, e.g. containerlab/simple-evpn
+
 `console.sh`  - attach to the docker console of a container, use simple hostname as the argument
 
 `tail-logs.sh` - tail logs of a docker container, use simple hostname as the argument
 
-
+example commands:
+../tail-logs.sh evpn1
+../console.sh ixia1
 
 
 # Other stuff
 
-containerlab/custom-multitool - `docker make` to build the Dockerfile. Currently set up to add apks to alpine linux.
+containerlab/custom-multitool - `docker make` to build the Dockerfile. Currently set up to add apks to the Alpine Linux based wbitt/network-multitool:latest.
 
 lab-dir/cfg-backup.sh - Download running configs and overwrite lab-dir/config/node.txt
 - Currently hard coded node names and junos password

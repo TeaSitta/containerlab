@@ -1,7 +1,7 @@
 ## Last changed: 2025-02-05 19:38:13 UTC
 version 24.2R1-S2.5;
 system {
-    host-name srx1;
+    host-name srx2;
     root-authentication {
         encrypted-password "$6$VQLBEpuc$NsZdyb9PSTT1cC434zVbz93QH2SS.fqVGsKVS6t9d.U2mY5veZ3SQXWof39SdpZB5st.AxNEouq0/EESHlmOM1";
     }
@@ -57,7 +57,7 @@ interfaces {
     ge-0/0/5 {
         unit 0 {
             family inet {
-                address 192.168.66.1/24;
+                address 192.168.77.1/24;
             }
         }
     }
@@ -68,10 +68,10 @@ interfaces {
                 active;
             }
         }
-        unit 10 {
-            vlan-id 10;
+        unit 20 {
+            vlan-id 20;
             family inet {
-                address 192.168.10.10/24;
+                address 192.168.20.10/24;
             }
         }
     }
@@ -88,7 +88,7 @@ interfaces {
     lo0 {
         unit 0 {
             family inet {
-                address 10.5.5.5/32;
+                address 10.6.6.6/32;
             }
         }
     }
@@ -109,8 +109,8 @@ routing-instances {
 }
 protocols {
     ospf {
-        area 0.0.0.10 {
-            interface ae0.10;
+        area 0.0.0.20 {
+            interface ae0.20;
             interface ge-0/0/5.0 {
                 passive;
             }
@@ -125,6 +125,6 @@ protocols {
 }
 routing-options {
     static {
-        route 0.0.0.0/0 next-hop 192.168.10.1;
+        route 0.0.0.0/0 next-hop 192.168.20.1;
     }
 }

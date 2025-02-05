@@ -3,7 +3,7 @@
 # REQUIRES sshpass
 # apt install sshpass
 
-declare -a hosts=("evpn1" "evpn2" "srx1")
+declare -a hosts=("evpn1" "evpn2" "srx1" "srx2")
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR

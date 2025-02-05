@@ -1,4 +1,4 @@
-## Last changed: 2025-02-04 23:20:42 UTC
+## Last changed: 2025-02-05 19:31:09 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -106,11 +106,9 @@ interfaces {
     irb {
         unit 10 {
             family inet {
-                address 192.168.10.3/24 {
-                    virtual-gateway-address 192.168.10.1;
-                }
+                address 192.168.10.1/24;
             }
-            virtual-gateway-v4-mac aa:bb:cc:00:00:10;
+            mac aa:bb:cc:00:00:10;
         }
         unit 20 {
             family inet {
@@ -151,9 +149,7 @@ routing-instances {
     srx1 {
         instance-type evpn;
         protocols {
-            evpn {
-                default-gateway no-gateway-community;
-            }
+            evpn;
         }
         vlan-id 10;
         routing-interface irb.10;

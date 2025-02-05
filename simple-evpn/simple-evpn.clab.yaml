@@ -30,6 +30,10 @@ topology:
 
     srx1:
       kind: juniper_vsrx
+      startup-config: configs/srx1.txt
+    srx2:
+      kind: juniper_vsrx
+      startup-config: configs/srx2.txt
 
 #    ixia1:
 #      kind: keysight_ixia-c-one
@@ -43,9 +47,14 @@ topology:
       mtu: 9200
     - endpoints: ["evpn1:ge-0/0/1", "evpn2:ge-0/0/1"]
       mtu: 9200
+
     - endpoints: ["evpn1:ge-0/0/3", "srx1:ge-0/0/0"]
-      mtu: 9200
     - endpoints: ["evpn2:ge-0/0/3", "srx1:ge-0/0/1"]
+    
+    - endpoints: ["evpn1:ge-0/0/4", "srx2:ge-0/0/0"]
+    - endpoints: ["evpn2:ge-0/0/4", "srx2:ge-0/0/1"]
+
+    - endpoints: ["srx1:ge-0/0/5", "srx2:ge-0/0/5"]
     # - endpoints: ["ixia1:eth1", "evpn1:ge-0/0/3"]
     # - endpoints: ["ixia1:eth2", "evpn2:ge-0/0/3"]
     # - endpoints: ["ixia2:eth1", "evpn1:ge-0/0/4"]
