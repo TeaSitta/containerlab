@@ -1,12 +1,14 @@
 # Network lab testing with containerlab
 
-## install-containerlab.sh will do the initial containerlab install on debian.
+## install-containerlab.sh will do the initial containerlab install on Debian.
+- Ensure nested virtualization is on and the Debian guest is passed the physical CPU properties.
+
 
 ## cd into one of the following topology directories:
 
-simple-evpn -- 2 node collapsed core with
+simple-evpn -- 2 node collapsed core for evpn-mpls, ESI and RT5 testing.
 
-stellar-evpn -- larger evpn-mpls core and pops
+evpn-mpls -- large evpn-mpls core with meshed leafs and PoP regional head end routers.
 
 ## run containerlab, or clab 
 common commands:
@@ -30,3 +32,5 @@ clab deploy
 
 containerlab/custom-multitool - `docker make` to build the Dockerfile. Currently set up to add apks to alpine linux.
 
+lab-dir/cfg-backup.sh - Download running configs and overwrite lab-dir/config/node.txt
+- Currently hard coded node names and junos password
