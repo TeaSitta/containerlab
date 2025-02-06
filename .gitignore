@@ -3,3 +3,5 @@ evpn-mpls/clab-evpn-mpls/
 evpn-mpls/.evpn-mpls.clab.yaml.bak
 simple-evpn/clab-evpn/
 simple-evpn/.simple-evpn.clab.yaml.bak
+srx-evpn/srx-evpn
+srx-evpn/.srx-evpn.clab.yaml.bak

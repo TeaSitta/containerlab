@@ -32,10 +32,10 @@ example commands:
 ../console.sh ixia1
 
 
-# Other stuff
+## Other stuff
 
 containerlab/custom-multitool - `docker make` to build the Dockerfile. Currently set up to add apks to the Alpine Linux based wbitt/network-multitool:latest.
 
 lab-dir/cfg-backup.sh - Download running configs and overwrite lab-dir/config/node.txt
 - Currently hard coded node names and junos password
-- Requires sshpass  ` sudo apt install -y sshpass `
+- Requires sshpass  `sudo apt install -y sshpass`

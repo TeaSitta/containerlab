@@ -1,0 +1,33 @@
+name: evpn
+topology:
+  kinds:
+    juniper_vjunosrouter:
+      image: vrnetlab/juniper_vjunos-router:23.4R2-S2.1
+    juniper_vsrx:
+      image: vrnetlab/juniper_vsrx:24.2R1-S2.5
+    linux:
+      image: custom-multitool
+    keysight_ixia-c-one:
+      image: ghcr.io/open-traffic-generator/ixia-c-one
+
+  nodes:
+    p-srx1:
+      kind: juniper_vsrx
+      startup-config: configs/p1.txt
+    evpn2:
+      kind: juniper_vsrx
+      startup-config: configs/p2.txt
+    srx1:
+      kind: juniper_vsrx
+      startup-config: configs/pe1.txt
+    srx2:
+      kind: juniper_vsrx
+      startup-config: configs/pe2.txt
+
+
+
+  links:
+    - endpoints: ["p1:ge-0/0/0", "p2:ge-0/0/0"]
+      mtu: 9200
+    - endpoints: ["p1:ge-0/0/1", "evpn2:ge-0/0/1"]
+      mtu: 9200
