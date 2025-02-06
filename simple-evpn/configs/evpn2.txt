@@ -1,4 +1,4 @@
-## Last changed: 2025-02-05 23:41:27 UTC
+## Last changed: 2025-02-06 01:51:18 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -77,13 +77,13 @@ interfaces {
         vlan-tagging;
         encapsulation flexible-ethernet-services;
         esi {
-            00:11:22:33:44:55:66:77:88:99;
+            00:ad:d0:c0:ff:ee:00:00:10:01;
             all-active;
         }
         aggregated-ether-options {
             lacp {
                 active;
-                system-id 10:10:10:10:10:10;
+                system-id c0:ff:ee:00:10:01;
             }
         }
         unit 10 {
@@ -96,13 +96,13 @@ interfaces {
         vlan-tagging;
         encapsulation flexible-ethernet-services;
         esi {
-            00:99:88:77:66:55:44:33:22:11;
+            00:ad:d0:c0:ff:ee:00:00:20:01;
             all-active;
         }
         aggregated-ether-options {
             lacp {
                 active;
-                system-id 20:20:20:20:20:20;
+                system-id c0:ff:ee:00:20:01;
             }
         }
         unit 20 {
@@ -205,6 +205,9 @@ routing-options {
 protocols {
     bgp {
         family inet {
+            labeled-unicast {
+                per-prefix-label;
+            }
             unicast;
         }
         family l2vpn {

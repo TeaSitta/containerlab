@@ -1,7 +1,7 @@
-## Last changed: 2025-02-06 01:51:02 UTC
+## Last changed: 2025-02-05 23:54:48 UTC
 version 23.4R2-S2.1;
 system {
-    host-name evpn1;
+    host-name p-srx1;
     root-authentication {
         encrypted-password "$6$3VdpIJfO$SXYiwd1zD0.dcIbUFwcz/bl9rMwceSmCjFvD1GT6BgocCF8h2gSoQR47X7M2RMqeVOFRIXXBfnuRGvQyJIoIv0";
     }
@@ -30,41 +30,13 @@ system {
 chassis {
     aggregated-devices {
         ethernet {
-            device-count 21;
+            device-count 4;
         }
     }
 }
 interfaces {
     ge-0/0/0 {
-        gigether-options {
-            802.3ad ae0;
-        }
-    }
-    ge-0/0/1 {
-        gigether-options {
-            802.3ad ae0;
-        }
-    }
-    ge-0/0/3 {
-        description "to srx1";
-        gigether-options {
-            802.3ad ae10;
-        }
-    }
-    ge-0/0/4 {
-        description "to srx2";
-        gigether-options {
-            802.3ad ae20;
-        }
-    }
-    ae0 {
-        description "to evpn2";
         mtu 9192;
-        aggregated-ether-options {
-            lacp {
-                active;
-            }
-        }
         unit 0 {
             family inet {
                 unnumbered-address lo0.0;
@@ -72,55 +44,43 @@ interfaces {
             family mpls;
         }
     }
-    ae10 {
-        description "to srx1";
-        vlan-tagging;
-        encapsulation flexible-ethernet-services;
-        esi {
-            00:ad:d0:c0:ff:ee:00:00:10:01;
-            all-active;
-            df-election-type {
-                preference {
-                    value 420;
-                }
+    ge-0/0/1 {
+        mtu 9192;
+        unit 0 {
+            family inet {
+                unnumbered-address lo0.0;
             }
-        }
-        aggregated-ether-options {
-            lacp {
-                active;
-                system-id c0:ff:ee:00:10:01;
-            }
-        }
-        unit 10 {
-            encapsulation vlan-bridge;
-            vlan-id 10;
+            family mpls;
         }
     }
-    ae20 {
-        description "to srx1";
-        vlan-tagging;
-        encapsulation flexible-ethernet-services;
-        esi {
-            00:ad:d0:c0:ff:ee:00:00:20:01;
-            all-active;
-            df-election-type {
-                preference {
-                    value 420;
-                }
+    ge-0/0/2 {
+        mtu 9192;
+        unit 0 {
+            family inet {
+                unnumbered-address lo0.0;
             }
-        }
-        aggregated-ether-options {
-            lacp {
-                active;
-                system-id c0:ff:ee:00:20:01;
-            }
-        }
-        unit 20 {
-            encapsulation vlan-bridge;
-            vlan-id 20;
+            family mpls;
         }
     }
-    fxp0 {
+    ge-0/0/3 {
+        mtu 9192;
+        unit 0 {
+            family inet {
+                unnumbered-address lo0.0;
+            }
+            family mpls;
+        }
+    }
+    ge-0/0/4 {
+        mtu 9192;
+        unit 0 {
+            family inet {
+                unnumbered-address lo0.0;
+            }
+            family mpls;
+        }
+    }
+     fxp0 {
         unit 0 {
             family inet {
                 address 10.0.0.15/24;
@@ -128,20 +88,6 @@ interfaces {
             family inet6 {
                 address 2001:db8::2/64;
             }
-        }
-    }
-    irb {
-        unit 10 {
-            family inet {
-                address 192.168.10.1/24;
-            }
-            mac aa:bb:cc:00:00:10;
-        }
-        unit 20 {
-            family inet {
-                address 192.168.20.1/24;
-            }
-            mac cc:bb:aa:00:00:20;
         }
     }
     lo0 {
@@ -174,28 +120,6 @@ routing-instances {
             }
         }
     }
-    srx1 {
-        instance-type evpn;
-        protocols {
-            evpn;
-        }
-        vlan-id 10;
-        routing-interface irb.10;
-        interface ae10.10;
-        route-distinguisher 10.1.1.1:10;
-        vrf-target target:10:10;
-    }
-    srx2 {
-        instance-type evpn;
-        protocols {
-            evpn;
-        }
-        vlan-id 20;
-        routing-interface irb.20;
-        interface ae20.20;
-        route-distinguisher 10.1.1.1:20;
-        vrf-target target:20:20;
-    }
 }
 routing-options {
     router-id 10.1.1.1;
@@ -215,10 +139,6 @@ routing-options {
 protocols {
     bgp {
         family inet {
-            /* https://www.juniper.net/documentation/us/en/software/junos/cli-reference/topics/ref/statement/per-prefix-label-edit-protocols-bgp.html */
-            labeled-unicast {
-                per-prefix-label;
-            }
             unicast;
         }
         family l2vpn {
@@ -243,18 +163,20 @@ protocols {
         graceful-restart;
     }
     evpn {
-        /* Required for an interconnected collapsed core like this, otherwise interconnect down = all CE ESI-LAGs down (to avoid split-brain in spine/leaf) */
         no-core-isolation;
     }
     ldp {
-        interface ae0.0;
+        interface all;
         interface fxp0.0 {
             disable;
         }
         interface lo0.0;
     }
     mpls {
-        interface ae0.0;
+        interface all;
+        interface fxp0.0 {
+            disable;
+        }
     }
     ospf {
         traffic-engineering;
@@ -263,9 +185,6 @@ protocols {
                 passive;
             }
             interface all {
-                interface-type p2p;
-            }
-            interface ae0.0 {
                 interface-type p2p;
             }
         }
