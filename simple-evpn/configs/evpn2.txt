@@ -1,4 +1,4 @@
-## Last changed: 2025-02-05 21:21:55 UTC
+## Last changed: 2025-02-05 23:41:27 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -79,11 +79,6 @@ interfaces {
         esi {
             00:11:22:33:44:55:66:77:88:99;
             all-active;
-            df-election-type {
-                preference {
-                    value 420;
-                }
-            }
         }
         aggregated-ether-options {
             lacp {
@@ -103,11 +98,6 @@ interfaces {
         esi {
             00:99:88:77:66:55:44:33:22:11;
             all-active;
-            df-election-type {
-                preference {
-                    value 420;
-                }
-            }
         }
         aggregated-ether-options {
             lacp {
