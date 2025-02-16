@@ -1,4 +1,4 @@
-## Last changed: 2025-02-06 01:51:18 UTC
+## Last changed: 2025-02-12 22:10:03 UTC
 version 23.4R2-S2.1;
 system {
     host-name evpn2;
@@ -32,6 +32,9 @@ chassis {
         ethernet {
             device-count 21;
         }
+    }
+    fpc 0 {
+        lite-mode;
     }
 }
 interfaces {
@@ -242,10 +245,10 @@ protocols {
         interface lo0.0;
     }
     mpls {
+        no-propagate-ttl;
         interface ae0.0;
     }
     ospf {
-        traffic-engineering;
         area 0.0.0.0 {
             interface lo0.0 {
                 passive;

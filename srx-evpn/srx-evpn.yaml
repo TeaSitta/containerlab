@@ -11,23 +11,61 @@ topology:
       image: ghcr.io/open-traffic-generator/ixia-c-one
 
   nodes:
-    p-srx1:
+    p:
       kind: juniper_vsrx
       startup-config: configs/p1.txt
-    evpn2:
+    p2:
       kind: juniper_vsrx
       startup-config: configs/p2.txt
-    srx1:
+    pe1:
       kind: juniper_vsrx
       startup-config: configs/pe1.txt
-    srx2:
+    pe2:
       kind: juniper_vsrx
       startup-config: configs/pe2.txt
+    pe3:
+      kind: juniper_vsrx
+      startup-config: configs/pe3.txt
+    pe4:
+      kind: juniper_vsrx
+      startup-config: configs/pe4.txt
 
+    # ce1:
+    #   kind: juniper_vsrx
+    #   startup-config: configs/ce1.txt
+    # ce2:
+    #   kind: juniper_vsrx
+    #   startup-config: configs/ce2.txt
 
+    ixia1:
 
   links:
     - endpoints: ["p1:ge-0/0/0", "p2:ge-0/0/0"]
       mtu: 9200
-    - endpoints: ["p1:ge-0/0/1", "evpn2:ge-0/0/1"]
+    - endpoints: ["p1:ge-0/0/1", "pe1:ge-0/0/0"]
       mtu: 9200
+    - endpoints: ["p1:ge-0/0/2", "pe2:ge-0/0/0"]
+      mtu: 9200
+    - endpoints: ["p1:ge-0/0/3", "pe3:ge-0/0/0"]
+      mtu: 9200
+    - endpoints: ["p1:ge-0/0/4", "pe4:ge-0/0/0"]
+      mtu: 9200
+
+
+    - endpoints: ["p2:ge-0/0/1", "pe1:ge-0/0/1"]
+      mtu: 9200
+    - endpoints: ["p2:ge-0/0/2", "pe2:ge-0/0/1"]
+      mtu: 9200
+    - endpoints: ["p2:ge-0/0/3", "pe3:ge-0/0/1"]
+      mtu: 9200
+    - endpoints: ["p2:ge-0/0/4", "pe4:ge-0/0/1"]
+      mtu: 9200
+
+    # - endpoints: ["ce1:ge-0/0/0", "pe1:ge-0/0/4"]
+    #   mtu: 9200
+    # - endpoints: ["ce1:ge-0/0/1", "pe2:ge-0/0/4"]
+    #   mtu: 9200
+    # - endpoints: ["ce2:ge-0/0/0", "pe3:ge-0/0/4"]
+    #   mtu: 9200
+    # - endpoints: ["ce2:ge-0/0/1", "pe4:ge-0/0/4"]
+    #   mtu: 9200

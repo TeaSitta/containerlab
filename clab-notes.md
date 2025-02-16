@@ -5,17 +5,21 @@ https://containerlab.dev/quickstart/#container-image
 
 # Common commands
 `sudo docker images`   - See what images are registered
-``
+
 `sudo containerlab inspect` - show running clab containers
+
 `sudo containerlab destroy x` - x=topology file, kill containers
 
 - vJunos takes a while to load (vm inside container), monitor container with:
+
 `docker logs -f <container-name>`
 
 - Attach to vtysh of an frr router
+
 `docker exec -it clab-frr01-router1 vtysh`
 
 - linux container shell
+
 `docker exec -it clab-host1 /bin/bash`
 
 # Image list:
@@ -23,7 +27,7 @@ https://containerlab.dev/quickstart/#container-image
 https://containerlab.dev/manual/kinds/
 
 ## Open images:
-
+```
 kind: nokia_srlinux
 image: ghcr.io/nokia/srlinux:24.3.3
 
@@ -35,14 +39,15 @@ image: grafana/grafana:7.4.3
 
 kind: ovs-bridge
 (no image needed) https://containerlab.dev/manual/kinds/ovs-bridge/
-
+```
 
 # Container details (vrnetlab)
 ## vJunos-router (default login admin:admin@123)
 - if running clab in vm, cpu must = host
 - must enable nested virtualization in kvm (enabled by default on proxmox?)
 
-Build with vrnetlab from vJunos-router-23.4R2-S2.1
+### Build with vrnetlab from vJunos-router-23.4R2-S2.1
+
 https://containerlab.dev/manual/vrnetlab/
 
 `git clone https://github.com/hellt/vrnetlab && cd vrnetlab`
@@ -56,6 +61,7 @@ vrnetlab/juniper_vjunos-router   23.4R2-S2.1   8b9c17ec25bb   About a minute ago
 ghcr.io/nokia/srlinux            24.3.3        4ad2a62aa1f7   6 months ago         3.03GB
 
 ```
+
 * Note and use the tag in the image!
 
 ## vSRX
@@ -166,6 +172,7 @@ router ospf
 # Troubleshooting
 ### Cannot deploy/inspect/etc lab
 `Error: the 'containerlab name' lab has already been deployed. Destroy the lab before deploying a lab with the same name`
-
-> docker network prune
-> docker container prune
+```
+docker network prune
+docker container prune
+```
